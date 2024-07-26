@@ -42,7 +42,7 @@
             background-color: #ff5722;
         }
 
-        .score-board {
+        .score-board, .timer {
             margin-top: 20px;
             font-size: 1.5rem;
         }
@@ -72,14 +72,18 @@
     <div class="score-board">
         Score: <span id="score">0</span>
     </div>
+    <div class="timer">
+        Time: <span id="time">10</span>s
+    </div>
     <button class="start-button" onclick="startGame()">Start Game</button>
     <script>
         const holes = document.querySelectorAll('.hole');
         const scoreBoard = document.getElementById('score');
-        const startButton = document.querySelector('.start-button');
+        const timerBoard = document.getElementById('time');
         let score = 0;
         let lastHole;
         let timeUp = false;
+        let countdown;
 
         function randomTime(min, max) {
             return Math.round(Math.random() * (max - min) + min);
@@ -107,10 +111,20 @@
 
         function startGame() {
             scoreBoard.textContent = 0;
+            timerBoard.textContent = 10;
             timeUp = false;
             score = 0;
             peep();
-            setTimeout(() => timeUp = true, 10000);
+            countdown = setInterval(() => {
+                let timeLeft = parseInt(timerBoard.textContent);
+                timeLeft--;
+                timerBoard.textContent = timeLeft;
+                if (timeLeft === 0) {
+                    clearInterval(countdown);
+                    timeUp = true;
+                    alert('Game Over! Your score is ' + score);
+                }
+            }, 1000);
         }
 
         function bonk(e) {
