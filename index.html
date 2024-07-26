@@ -38,9 +38,24 @@
             cursor: pointer;
         }
 
+        .hole.active {
+            background-color: #ff5722;
+        }
+
         .score-board {
             margin-top: 20px;
             font-size: 1.5rem;
+        }
+
+        .start-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -57,9 +72,11 @@
     <div class="score-board">
         Score: <span id="score">0</span>
     </div>
+    <button class="start-button" onclick="startGame()">Start Game</button>
     <script>
         const holes = document.querySelectorAll('.hole');
         const scoreBoard = document.getElementById('score');
+        const startButton = document.querySelector('.start-button');
         let score = 0;
         let lastHole;
         let timeUp = false;
@@ -81,9 +98,9 @@
         function peep() {
             const time = randomTime(200, 1000);
             const hole = randomHole(holes);
-            hole.textContent = '👾';
+            hole.classList.add('active');
             setTimeout(() => {
-                hole.textContent = '';
+                hole.classList.remove('active');
                 if (!timeUp) peep();
             }, time);
         }
@@ -98,16 +115,14 @@
 
         function bonk(e) {
             if (!e.isTrusted) return; // cheater!
-            if (this.textContent === '👾') {
+            if (this.classList.contains('active')) {
                 score++;
-                this.textContent = '';
+                this.classList.remove('active');
                 scoreBoard.textContent = score;
             }
         }
 
         holes.forEach(hole => hole.addEventListener('click', bonk));
-
-        startGame();
     </script>
 </body>
 </html>
