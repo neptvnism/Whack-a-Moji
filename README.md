@@ -8,6 +8,7 @@ A simple Whack-a-Mole game implemented using HTML, CSS, and JavaScript!
 - Randomized mole appearance with different emojis! Silly faces
 - Timer countdown and score tracking.
 - Simple and intuitive interface.
+- Settings to change duration or difficulty 
 
 ## How to Play
 
