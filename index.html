@@ -47,7 +47,7 @@
             font-size: 1.5rem;
         }
 
-        .start-button {
+        .start-button, .settings-button {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 1rem;
@@ -56,6 +56,21 @@
             color: #fff;
             border: none;
             border-radius: 5px;
+        }
+
+        .settings-menu {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .settings-menu label {
+            margin: 10px 0;
         }
     </style>
 </head>
@@ -76,10 +91,32 @@
         Time: <span id="time">10</span>s
     </div>
     <button class="start-button" onclick="startGame()">Start Game</button>
+    <button class="settings-button" onclick="toggleSettings()">⚙️</button>
+    <div class="settings-menu" id="settingsMenu">
+        <label>
+            Game Duration:
+            <select id="gameDuration">
+                <option value="10">10 seconds</option>
+                <option value="20">20 seconds</option>
+                <option value="30">30 seconds</option>
+            </select>
+        </label>
+        <label>
+            Difficulty:
+            <select id="difficulty">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </label>
+    </div>
     <script>
         const holes = document.querySelectorAll('.hole');
         const scoreBoard = document.getElementById('score');
         const timerBoard = document.getElementById('time');
+        const settingsMenu = document.getElementById('settingsMenu');
+        const gameDuration = document.getElementById('gameDuration');
+        const difficulty = document.getElementById('difficulty');
         let score = 0;
         let lastHole;
         let timeUp = false;
@@ -101,7 +138,18 @@
         }
 
         function peep() {
-            const time = randomTime(200, 1000);
+            let time;
+            switch (difficulty.value) {
+                case 'easy':
+                    time = randomTime(500, 1000);
+                    break;
+                case 'medium':
+                    time = randomTime(300, 800);
+                    break;
+                case 'hard':
+                    time = randomTime(200, 600);
+                    break;
+            }
             const hole = randomHole(holes);
             hole.classList.add('active');
             hole.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
@@ -114,7 +162,7 @@
 
         function startGame() {
             scoreBoard.textContent = 0;
-            timerBoard.textContent = 10;
+            timerBoard.textContent = gameDuration.value;
             timeUp = false;
             score = 0;
             peep();
@@ -137,6 +185,14 @@
                 this.classList.remove('active');
                 this.innerHTML = "";
                 scoreBoard.textContent = score;
+            }
+        }
+
+        function toggleSettings() {
+            if (settingsMenu.style.display === 'none' || settingsMenu.style.display === '') {
+                settingsMenu.style.display = 'flex';
+            } else {
+                settingsMenu.style.display = 'none';
             }
         }
 
